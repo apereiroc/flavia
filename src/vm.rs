@@ -59,6 +59,21 @@ impl VirtualMachine {
                 // Cast the number as our registers are i32
                 self.registers[register_idx] = number as i32;
             }
+            Opcode::ADD => {
+                let val1 = self.registers[self.next_8_bits() as usize];
+                let val2 = self.registers[self.next_8_bits() as usize];
+                self.registers[self.next_8_bits() as usize] = val1 + val2;
+            }
+            Opcode::SUB => {
+                let val1 = self.registers[self.next_8_bits() as usize];
+                let val2 = self.registers[self.next_8_bits() as usize];
+                self.registers[self.next_8_bits() as usize] = val1 - val2;
+            }
+            Opcode::MUL => {
+                let val1 = self.registers[self.next_8_bits() as usize];
+                let val2 = self.registers[self.next_8_bits() as usize];
+                self.registers[self.next_8_bits() as usize] = val1 * val2;
+            }
             Opcode::HLT => {
                 println!("Executing HLT");
                 return false;

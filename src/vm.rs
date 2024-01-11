@@ -149,3 +149,14 @@ fn test_opcode_sub() {
     test_vm.run_once();
     assert_eq!(test_vm.registers[7], 2);
 }
+
+#[test]
+fn test_opcode_mul() {
+    let mut test_vm = VirtualMachine::new();
+    test_vm.registers[8] = 9;
+    test_vm.registers[3] = 5;
+    let test_program = vec![Opcode::MUL as u8, 8, 3, 12];
+    test_vm.program = test_program;
+    test_vm.run_once();
+    assert_eq!(test_vm.registers[12], 45);
+}

@@ -160,3 +160,15 @@ fn test_opcode_mul() {
     test_vm.run_once();
     assert_eq!(test_vm.registers[12], 45);
 }
+
+#[test]
+fn test_opcode_div() {
+    let mut test_vm = VirtualMachine::new();
+    test_vm.registers[3] = 15;
+    test_vm.registers[6] = 4;
+    let test_program = vec![Opcode::DIV as u8, 3, 6, 19];
+    test_vm.program = test_program;
+    test_vm.run_once();
+    assert_eq!(test_vm.registers[19], 3);
+    assert_eq!(test_vm.remainder, 3);
+}

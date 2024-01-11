@@ -1,13 +1,15 @@
 #[derive(Debug, PartialEq)]
 pub enum Opcode {
-    HLT,
-    IGL,
+    LOAD, // Load a number into a register
+    HLT,  // Short for halt. Stops the execution.
+    IGL,  // Short for illegal. Terminates with an error
 }
 
 impl From<u8> for Opcode {
     fn from(value: u8) -> Self {
         match value {
-            0 => return Opcode::HLT,
+            0 => return Opcode::LOAD,
+            1 => return Opcode::HLT,
             _ => return Opcode::IGL,
         }
     }

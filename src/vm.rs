@@ -47,3 +47,21 @@ fn test_create_vm() {
     let vm = VirtualMachine::new();
     assert_eq!(vm.registers[0], 0);
 }
+
+#[test]
+fn test_opcode_hlt() {
+    let mut test_vm = VirtualMachine::new();
+    let test_program = vec![0, 0, 0, 0];
+    test_vm.program = test_program;
+    test_vm.run();
+    assert_eq!(test_vm.pc, 1);
+}
+
+#[test]
+fn test_opcode_igl() {
+    let mut test_vm = VirtualMachine::new();
+    let test_program = vec![200, 0, 0, 0];
+    test_vm.program = test_program;
+    test_vm.run();
+    assert_eq!(test_vm.pc, 1);
+}

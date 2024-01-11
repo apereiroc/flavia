@@ -1,7 +1,7 @@
 #[derive(Debug, PartialEq)]
 pub enum Opcode {
-    LOAD, // Load a number into a register
     HLT,  // Short for halt. Stops the execution.
+    LOAD, // Load a number into a register
     ADD,  // Add two numbers and save the result in a register
     SUB,  // Subtract two numbers and save the result in a register
     MUL,  // Multiply two numbers and save the result in a register

@@ -120,10 +120,21 @@ fn test_opcode_igl() {
 }
 
 #[test]
-fn test_load_opcode() {
+fn test_opcode_load() {
     let mut test_vm = VirtualMachine::new();
     let test_program = vec![Opcode::LOAD as u8, 0, 1, 244]; // 256 * 1 + 244 = 500 :-)
     test_vm.program = test_program;
     test_vm.run_once();
     assert_eq!(test_vm.registers[0], 500);
+}
+
+#[test]
+fn test_opcode_add() {
+    let mut test_vm = VirtualMachine::new();
+    test_vm.registers[4] = 5;
+    test_vm.registers[9] = 3;
+    let test_program = vec![Opcode::ADD as u8, 4, 9, 17];
+    test_vm.program = test_program;
+    test_vm.run_once();
+    assert_eq!(test_vm.registers[17], 8);
 }

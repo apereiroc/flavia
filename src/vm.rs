@@ -34,33 +34,41 @@ impl VirtualMachine {
     }
 
     pub fn run(&mut self) {
-        loop {
-            // The program counter must be within the program
-            if self.pc >= self.program.len() {
-                break;
-            }
+        let mut is_done = false;
+        while !is_done {
+            is_done = self.execute_instruction();
+        }
+    }
 
-            match self.decode_opcode() {
-                Opcode::HLT => {
-                    println!("Executing HLT");
-                    return;
-                }
-                Opcode::LOAD => {
-                    // Cast to usize so to use it as index into the array
-                    let register_idx = self.next_8_bits() as usize;
-                    // Read the number
-                    let number = self.next_16_bits() as u16;
-                    // Cast the number as our registers are i32
-                    self.registers[register_idx] = number as i32;
-                    // Continue the loop
-                    continue;
-                }
-                _ => {
-                    println!("Opcode not valid. Terminating.");
-                    return;
-                }
+    pub fn run_once(&mut self) {
+        self.execute_instruction();
+    }
+
+    fn execute_instruction(&mut self) -> bool {
+        // The program counter must be within the program
+        if self.pc >= self.program.len() {
+            return false;
+        }
+
+        match self.decode_opcode() {
+            Opcode::LOAD => {
+                // Cast to usize so to use it as index into the array
+                let register_idx = self.next_8_bits() as usize;
+                // Read the number
+                let number = self.next_16_bits() as u16;
+                // Cast the number as our registers are i32
+                self.registers[register_idx] = number as i32;
+            }
+            Opcode::HLT => {
+                println!("Executing HLT");
+                return false;
+            }
+            Opcode::IGL => {
+                println!("Illegal code received");
+                return false;
             }
         }
+        return true;
     }
 }
 
@@ -75,16 +83,16 @@ fn test_opcode_hlt() {
     let mut test_vm = VirtualMachine::new();
     let test_program = vec![Opcode::HLT as u8, 0, 0, 0];
     test_vm.program = test_program;
-    test_vm.run();
+    test_vm.run_once();
     assert_eq!(test_vm.pc, 1);
 }
 
 #[test]
 fn test_opcode_igl() {
     let mut test_vm = VirtualMachine::new();
-    let test_program = vec![200, 0, 0, 0];
+    let test_program = vec![Opcode::IGL as u8, 0, 0, 0];
     test_vm.program = test_program;
-    test_vm.run();
+    test_vm.run_once();
     assert_eq!(test_vm.pc, 1);
 }
 
@@ -93,6 +101,6 @@ fn test_load_opcode() {
     let mut test_vm = VirtualMachine::new();
     let test_program = vec![Opcode::LOAD as u8, 0, 1, 244]; // 256 * 1 + 244 = 500 :-)
     test_vm.program = test_program;
-    test_vm.run();
+    test_vm.run_once();
     assert_eq!(test_vm.registers[0], 500);
 }

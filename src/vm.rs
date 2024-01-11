@@ -15,10 +15,22 @@ impl VirtualMachine {
         }
     }
 
-    pub fn decode_opcode(&mut self) -> Opcode {
+    fn decode_opcode(&mut self) -> Opcode {
         let opcode = Opcode::from(self.program[self.pc]);
         self.pc += 1;
         return opcode;
+    }
+
+    fn next_8_bits(&mut self) -> u8 {
+        let result = self.program[self.pc];
+        self.pc += 1;
+        return result;
+    }
+
+    fn next_16_bits(&mut self) -> u16 {
+        let result = ((self.program[self.pc] as u16) << 8) | self.program[self.pc + 1] as u16;
+        self.pc += 2;
+        return result;
     }
 
     pub fn run(&mut self) {
@@ -32,6 +44,16 @@ impl VirtualMachine {
                 Opcode::HLT => {
                     println!("Executing HLT");
                     return;
+                }
+                Opcode::LOAD => {
+                    // Cast to usize so to use it as index into the array
+                    let register_idx = self.next_8_bits() as usize;
+                    // Read the number
+                    let number = self.next_16_bits() as u16;
+                    // Cast the number as our registers are i32
+                    self.registers[register_idx] = number as i32;
+                    // Continue the loop
+                    continue;
                 }
                 _ => {
                     println!("Opcode not valid. Terminating.");
@@ -51,7 +73,7 @@ fn test_create_vm() {
 #[test]
 fn test_opcode_hlt() {
     let mut test_vm = VirtualMachine::new();
-    let test_program = vec![0, 0, 0, 0];
+    let test_program = vec![Opcode::HLT as u8, 0, 0, 0];
     test_vm.program = test_program;
     test_vm.run();
     assert_eq!(test_vm.pc, 1);
@@ -64,4 +86,13 @@ fn test_opcode_igl() {
     test_vm.program = test_program;
     test_vm.run();
     assert_eq!(test_vm.pc, 1);
+}
+
+#[test]
+fn test_load_opcode() {
+    let mut test_vm = VirtualMachine::new();
+    let test_program = vec![Opcode::LOAD as u8, 0, 1, 244]; // 256 * 1 + 244 = 500 :-)
+    test_vm.program = test_program;
+    test_vm.run();
+    assert_eq!(test_vm.registers[0], 500);
 }

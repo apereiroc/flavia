@@ -4,6 +4,7 @@ pub struct VirtualMachine {
     registers: [i32; 32], // register set
     pc: usize,            // program counter
     program: Vec<u8>,     // vector to store the bytecode
+    remainder: u32,       // to store the remainder of a division
 }
 
 impl VirtualMachine {
@@ -12,6 +13,7 @@ impl VirtualMachine {
             registers: [0; 32],
             pc: 0,
             program: vec![],
+            remainder: 0,
         }
     }
 
@@ -73,6 +75,12 @@ impl VirtualMachine {
                 let val1 = self.registers[self.next_8_bits() as usize];
                 let val2 = self.registers[self.next_8_bits() as usize];
                 self.registers[self.next_8_bits() as usize] = val1 * val2;
+            }
+            Opcode::DIV => {
+                let val1 = self.registers[self.next_8_bits() as usize];
+                let val2 = self.registers[self.next_8_bits() as usize];
+                self.registers[self.next_8_bits() as usize] = val1 / val2;
+                self.remainder = (val1 % val2) as u32;
             }
             Opcode::HLT => {
                 println!("Executing HLT");

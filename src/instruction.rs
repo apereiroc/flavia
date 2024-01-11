@@ -4,7 +4,8 @@ pub enum Opcode {
     HLT,  // Short for halt. Stops the execution.
     ADD,  // Add two numbers and save the result in a register
     SUB,  // Subtract two numbers and save the result in a register
-    MUL,  // Subtract two numbers and save the result in a register
+    MUL,  // Multiply two numbers and save the result in a register
+    DIV,  // Divide two numbers and save the result in a register
     IGL,  // Short for illegal. Terminates with an error
 }
 
@@ -16,6 +17,7 @@ impl From<u8> for Opcode {
             2 => return Opcode::ADD,
             3 => return Opcode::SUB,
             4 => return Opcode::MUL,
+            5 => return Opcode::DIV,
             _ => return Opcode::IGL,
         }
     }

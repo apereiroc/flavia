@@ -82,6 +82,10 @@ impl VirtualMachine {
                 self.registers[self.next_8_bits() as usize] = val1 / val2;
                 self.remainder = (val1 % val2) as u32;
             }
+            Opcode::JMP => {
+                let target = self.registers[self.next_8_bits() as usize];
+                self.pc = target as usize;
+            }
             Opcode::HLT => {
                 println!("Executing HLT");
                 return false;
@@ -171,4 +175,14 @@ fn test_opcode_div() {
     test_vm.run_once();
     assert_eq!(test_vm.registers[19], 3);
     assert_eq!(test_vm.remainder, 3);
+}
+
+#[test]
+fn test_opcode_jmp() {
+    let mut test_vm = VirtualMachine::new();
+    test_vm.registers[3] = 7;
+    let test_program = vec![Opcode::JMP as u8, 3, 0, 0];
+    test_vm.program = test_program;
+    test_vm.run_once();
+    assert_eq!(test_vm.pc, 7);
 }

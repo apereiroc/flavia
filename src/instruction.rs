@@ -15,6 +15,7 @@ pub enum Opcode {
     LT,   // Short for less than. Compare if a number is less than other
     GTQ,  // Short for greater than or equal. Compare if a number is greater than or equal to other
     LTQ,  // Short for greater than or equal. Compare if a number is less than or equal to other
+    JEQ,  // Short for jump if equal. Jump if the last comparison was evaluated to true
     IGL,  // Short for illegal. Terminates with an error
 }
 
@@ -36,6 +37,7 @@ impl From<u8> for Opcode {
             12 => return Opcode::LT,
             13 => return Opcode::GTQ,
             14 => return Opcode::LTQ,
+            15 => return Opcode::JEQ,
             _ => return Opcode::IGL,
         }
     }

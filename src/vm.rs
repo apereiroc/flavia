@@ -83,8 +83,22 @@ impl VirtualMachine {
                 self.remainder = (val1 % val2) as u32;
             }
             Opcode::JMP => {
+                // Get the register where the memory address where to move to is stored
                 let target = self.registers[self.next_8_bits() as usize];
+                // Assign it
                 self.pc = target as usize;
+            }
+            Opcode::JMPF => {
+                // Get the register where the number of bytes is stored
+                let value = self.registers[self.next_8_bits() as usize];
+                // Increase it
+                self.pc += value as usize;
+            }
+            Opcode::JMPB => {
+                // Get the register where the number of bytes is stored
+                let value = self.registers[self.next_8_bits() as usize];
+                // Decrease it
+                self.pc -= value as usize;
             }
             Opcode::HLT => {
                 println!("Executing HLT");
@@ -185,4 +199,25 @@ fn test_opcode_jmp() {
     test_vm.program = test_program;
     test_vm.run_once();
     assert_eq!(test_vm.pc, 7);
+}
+
+#[test]
+fn test_opcode_jmpf() {
+    let mut test_vm = VirtualMachine::new();
+    test_vm.registers[8] = 20;
+    let test_program = vec![Opcode::JMPF as u8, 8, 0, 0];
+    test_vm.program = test_program;
+    test_vm.run_once();
+    assert_eq!(test_vm.pc, 22);
+}
+
+#[test]
+fn test_opcode_jmpb() {
+    let mut test_vm = VirtualMachine::new();
+    test_vm.registers[7] = 2;
+    let test_program = vec![Opcode::LOAD as u8, 0, 0, 0, Opcode::JMPB as u8, 7, 0, 0];
+    test_vm.program = test_program;
+    test_vm.run_once();
+    test_vm.run_once();
+    assert_eq!(test_vm.pc, 4);
 }

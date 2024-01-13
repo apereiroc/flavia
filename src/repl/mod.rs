@@ -1,3 +1,4 @@
+use crate::instruction;
 use crate::vm::VirtualMachine;
 use std;
 use std::io;
@@ -49,6 +50,18 @@ impl Repl {
 
             // Process the input
             match buffer {
+                ".program" => {
+                    println!("List of instructions currently in VM's program vector:");
+                    for instruction in &self.vm.program {
+                        println!("{}", instruction);
+                    }
+                    println!("End of list.");
+                }
+                ".registers" => {
+                    println!("List of the registers' contents:");
+                    println!("{:#?}", self.vm.registers);
+                    println!("End of list.");
+                }
                 ".q" => {
                     println!("Exiting. Bye bye!");
                     std::process::exit(0);

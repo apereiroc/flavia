@@ -44,11 +44,19 @@ impl Repl {
             // Remove white spaces
             let buffer = buffer.trim();
 
+            // Add command to history buffer
+            self.command_buffer.push(buffer.to_string());
+
             // Process the input
             match buffer {
                 ".q" => {
-                    println!("Bye bye");
+                    println!("Exiting. Bye bye!");
                     std::process::exit(0);
+                }
+                ".history" => {
+                    for cmd in &self.command_buffer {
+                        println!("{}", cmd);
+                    }
                 }
                 _ => {
                     println!("Invalid input");

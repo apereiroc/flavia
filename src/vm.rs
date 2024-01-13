@@ -5,6 +5,7 @@ pub struct VirtualMachine {
     pc: usize,            // program counter
     program: Vec<u8>,     // vector to store the bytecode
     remainder: u32,       // to store the remainder of a division
+    equal_flag: bool,     // to store the result of the last comparison operation
 }
 
 impl VirtualMachine {
@@ -14,6 +15,7 @@ impl VirtualMachine {
             pc: 0,
             program: vec![],
             remainder: 0,
+            equal_flag: false,
         }
     }
 

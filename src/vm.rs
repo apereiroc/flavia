@@ -178,7 +178,18 @@ impl VirtualMachine {
 #[test]
 fn test_create_vm() {
     let vm = VirtualMachine::new();
-    assert_eq!(vm.registers[0], 0);
+    // check if all registers are set to 0
+    for register in vm.registers.into_iter() {
+        assert_eq!(register, 0);
+    }
+    // check if pc is 0
+    assert_eq!(vm.pc, 0);
+    // check if program is empty
+    assert_eq!(vm.program.is_empty(), true);
+    // check if remainder is 0
+    assert_eq!(vm.remainder, 0);
+    // check if equal flag is false
+    assert_eq!(vm.equal_flag, false);
 }
 
 #[test]

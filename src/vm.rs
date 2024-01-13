@@ -48,6 +48,10 @@ impl VirtualMachine {
         self.execute_instruction();
     }
 
+    pub fn add_byte(&mut self, byte: u8) {
+        self.program.push(byte);
+    }
+
     fn execute_instruction(&mut self) -> bool {
         // The program counter must be within the program
         if self.pc >= self.program.len() {
@@ -190,6 +194,20 @@ fn test_create_vm() {
     assert_eq!(vm.remainder, 0);
     // check if equal flag is false
     assert_eq!(vm.equal_flag, false);
+}
+
+#[test]
+fn test_add_byte() {
+    let mut vm = VirtualMachine::new();
+    let bytes: Vec<u8> = vec![0, 23, 58, 231, 145];
+
+    for &byte in bytes.iter() {
+        vm.add_byte(byte);
+    }
+
+    for (idx, &byte) in vm.program.iter().enumerate() {
+        assert_eq!(byte, bytes[idx]);
+    }
 }
 
 #[test]

@@ -9,6 +9,7 @@ pub enum Opcode {
     JMP,  // Short for jump. Absolute jump; move the program counter to a byte in the program
     JMPF, // Short for jump forwards. Relative jump; move the program counter forwards by x bytes
     JMPB, // Short for jump backwards. Relative jump; move the program counter backwards by x bytes
+    EQ,   // Short for equal. Compare two numbers and save the result in the dedicated register
     IGL,  // Short for illegal. Terminates with an error
 }
 
@@ -24,6 +25,7 @@ impl From<u8> for Opcode {
             6 => return Opcode::JMP,
             7 => return Opcode::JMPF,
             8 => return Opcode::JMPB,
+            9 => return Opcode::EQ,
             _ => return Opcode::IGL,
         }
     }

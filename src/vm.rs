@@ -102,6 +102,14 @@ impl VirtualMachine {
                 // Decrease it
                 self.pc -= value as usize;
             }
+            Opcode::EQ => {
+                // Get values from registers
+                let val1 = self.registers[self.next_8_bits() as usize];
+                let val2 = self.registers[self.next_8_bits() as usize];
+                // Store the result in the dedicated register
+                self.equal_flag = val1 == val2;
+                self.next_8_bits();
+            }
             Opcode::HLT => {
                 println!("Executing HLT");
                 return false;
@@ -222,4 +230,17 @@ fn test_opcode_jmpb() {
     test_vm.run_once();
     test_vm.run_once();
     assert_eq!(test_vm.pc, 4);
+}
+
+#[test]
+fn test_opcode_eq() {
+    let mut test_vm = VirtualMachine::new();
+    test_vm.registers[3] = 10;
+    test_vm.registers[7] = 10;
+    let test_program = vec![Opcode::EQ as u8, 3, 7, 0, Opcode::EQ as u8, 3, 5, 0];
+    test_vm.program = test_program;
+    test_vm.run_once();
+    assert_eq!(test_vm.equal_flag, true);
+    test_vm.run_once();
+    assert_eq!(test_vm.equal_flag, false);
 }

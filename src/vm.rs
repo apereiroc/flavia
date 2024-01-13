@@ -1,11 +1,11 @@
 use crate::instruction::Opcode;
 
 pub struct VirtualMachine {
-    registers: [i32; 32], // register set
-    pc: usize,            // program counter
-    program: Vec<u8>,     // vector to store the bytecode
-    remainder: u32,       // to store the remainder of a division
-    equal_flag: bool,     // to store the result of the last comparison operation
+    pub registers: [i32; 32], // register set
+    pc: usize,                // program counter
+    pub program: Vec<u8>,     // vector to store the bytecode
+    remainder: u32,           // to store the remainder of a division
+    equal_flag: bool,         // to store the result of the last comparison operation
 }
 
 impl VirtualMachine {

@@ -110,6 +110,46 @@ impl VirtualMachine {
                 self.equal_flag = val1 == val2;
                 self.next_8_bits();
             }
+            Opcode::NEQ => {
+                // Get values from registers
+                let val1 = self.registers[self.next_8_bits() as usize];
+                let val2 = self.registers[self.next_8_bits() as usize];
+                // Store the result in the dedicated register
+                self.equal_flag = val1 != val2;
+                self.next_8_bits();
+            }
+            Opcode::GT => {
+                // Get values from registers
+                let val1 = self.registers[self.next_8_bits() as usize];
+                let val2 = self.registers[self.next_8_bits() as usize];
+                // Store the result in the dedicated register
+                self.equal_flag = val1 > val2;
+                self.next_8_bits();
+            }
+            Opcode::LT => {
+                // Get values from registers
+                let val1 = self.registers[self.next_8_bits() as usize];
+                let val2 = self.registers[self.next_8_bits() as usize];
+                // Store the result in the dedicated register
+                self.equal_flag = val1 < val2;
+                self.next_8_bits();
+            }
+            Opcode::GTQ => {
+                // Get values from registers
+                let val1 = self.registers[self.next_8_bits() as usize];
+                let val2 = self.registers[self.next_8_bits() as usize];
+                // Store the result in the dedicated register
+                self.equal_flag = val1 >= val2;
+                self.next_8_bits();
+            }
+            Opcode::LTQ => {
+                // Get values from registers
+                let val1 = self.registers[self.next_8_bits() as usize];
+                let val2 = self.registers[self.next_8_bits() as usize];
+                // Store the result in the dedicated register
+                self.equal_flag = val1 <= val2;
+                self.next_8_bits();
+            }
             Opcode::HLT => {
                 println!("Executing HLT");
                 return false;
@@ -243,4 +283,101 @@ fn test_opcode_eq() {
     assert_eq!(test_vm.equal_flag, true);
     test_vm.run_once();
     assert_eq!(test_vm.equal_flag, false);
+}
+
+#[test]
+fn test_opcode_neq() {
+    let mut test_vm = VirtualMachine::new();
+    test_vm.registers[3] = 10;
+    test_vm.registers[7] = 10;
+    let test_program = vec![Opcode::NEQ as u8, 3, 7, 0, Opcode::NEQ as u8, 3, 5, 0];
+    test_vm.program = test_program;
+    test_vm.run_once();
+    assert_eq!(test_vm.equal_flag, false);
+    test_vm.run_once();
+    assert_eq!(test_vm.equal_flag, true);
+}
+
+#[test]
+fn test_opcode_gt() {
+    let mut test_vm = VirtualMachine::new();
+    test_vm.registers[3] = 5;
+    test_vm.registers[7] = 10;
+    let test_program = vec![Opcode::GT as u8, 3, 7, 0, Opcode::GT as u8, 7, 3, 0];
+    test_vm.program = test_program;
+    test_vm.run_once();
+    assert_eq!(test_vm.equal_flag, false);
+    test_vm.run_once();
+    assert_eq!(test_vm.equal_flag, true);
+}
+
+#[test]
+fn test_opcode_lt() {
+    let mut test_vm = VirtualMachine::new();
+    test_vm.registers[3] = 5;
+    test_vm.registers[7] = 10;
+    let test_program = vec![Opcode::LT as u8, 3, 7, 0, Opcode::LT as u8, 7, 3, 0];
+    test_vm.program = test_program;
+    test_vm.run_once();
+    assert_eq!(test_vm.equal_flag, true);
+    test_vm.run_once();
+    assert_eq!(test_vm.equal_flag, false);
+}
+
+#[test]
+fn test_opcode_gtq() {
+    let mut test_vm = VirtualMachine::new();
+    test_vm.registers[3] = 5;
+    test_vm.registers[7] = 10;
+    test_vm.registers[9] = 10;
+    let test_program = vec![
+        Opcode::GTQ as u8,
+        3,
+        7,
+        0,
+        Opcode::GTQ as u8,
+        7,
+        3,
+        0,
+        Opcode::GTQ as u8,
+        7,
+        9,
+        0,
+    ];
+    test_vm.program = test_program;
+    test_vm.run_once();
+    assert_eq!(test_vm.equal_flag, false);
+    test_vm.run_once();
+    assert_eq!(test_vm.equal_flag, true);
+    test_vm.run_once();
+    assert_eq!(test_vm.equal_flag, true);
+}
+
+#[test]
+fn test_opcode_ltq() {
+    let mut test_vm = VirtualMachine::new();
+    test_vm.registers[3] = 5;
+    test_vm.registers[7] = 10;
+    test_vm.registers[9] = 10;
+    let test_program = vec![
+        Opcode::LTQ as u8,
+        3,
+        7,
+        0,
+        Opcode::LTQ as u8,
+        7,
+        3,
+        0,
+        Opcode::LTQ as u8,
+        7,
+        9,
+        0,
+    ];
+    test_vm.program = test_program;
+    test_vm.run_once();
+    assert_eq!(test_vm.equal_flag, true);
+    test_vm.run_once();
+    assert_eq!(test_vm.equal_flag, false);
+    test_vm.run_once();
+    assert_eq!(test_vm.equal_flag, true);
 }

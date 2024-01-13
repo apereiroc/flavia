@@ -9,7 +9,12 @@ pub enum Opcode {
     JMP,  // Short for jump. Absolute jump; move the program counter to a byte in the program
     JMPF, // Short for jump forwards. Relative jump; move the program counter forwards by x bytes
     JMPB, // Short for jump backwards. Relative jump; move the program counter backwards by x bytes
-    EQ,   // Short for equal. Compare two numbers and save the result in the dedicated register
+    EQ,   // Short for equal. Compare if two numbers are equal
+    NEQ,  // Short for not equal. Compare if two numbers are not equal
+    GT,   // Short for greater than. Compare if a number is greater than other
+    LT,   // Short for less than. Compare if a number is less than other
+    GTQ,  // Short for greater than or equal. Compare if a number is greater than or equal to other
+    LTQ,  // Short for greater than or equal. Compare if a number is less than or equal to other
     IGL,  // Short for illegal. Terminates with an error
 }
 
@@ -26,6 +31,11 @@ impl From<u8> for Opcode {
             7 => return Opcode::JMPF,
             8 => return Opcode::JMPB,
             9 => return Opcode::EQ,
+            10 => return Opcode::NEQ,
+            11 => return Opcode::GT,
+            12 => return Opcode::LT,
+            13 => return Opcode::GTQ,
+            14 => return Opcode::LTQ,
             _ => return Opcode::IGL,
         }
     }

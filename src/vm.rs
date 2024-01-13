@@ -156,6 +156,12 @@ impl VirtualMachine {
                     self.pc = target as usize;
                 }
             }
+            Opcode::JNEQ => {
+                let target = self.registers[self.next_8_bits() as usize];
+                if !self.equal_flag {
+                    self.pc = target as usize;
+                }
+            }
             Opcode::HLT => {
                 println!("Executing HLT");
                 return false;
@@ -394,9 +400,22 @@ fn test_opcode_jeq() {
     test_vm.registers[8] = 13;
     test_vm.registers[1] = 5;
     test_vm.registers[2] = 5;
-    let test_program = vec![Opcode::EQ as u8, 1, 2, 0, Opcode::JMP as u8, 8, 0, 0];
+    let test_program = vec![Opcode::EQ as u8, 1, 2, 0, Opcode::JEQ as u8, 8, 0, 0];
     test_vm.program = test_program;
     test_vm.run_once();
     test_vm.run_once();
     assert_eq!(test_vm.pc, 13);
+}
+
+#[test]
+fn test_opcode_jneq() {
+    let mut test_vm = VirtualMachine::new();
+    test_vm.registers[8] = 9;
+    test_vm.registers[1] = 8;
+    test_vm.registers[2] = 5;
+    let test_program = vec![Opcode::EQ as u8, 1, 2, 0, Opcode::JNEQ as u8, 8, 0, 0];
+    test_vm.program = test_program;
+    test_vm.run_once();
+    test_vm.run_once();
+    assert_eq!(test_vm.pc, 9);
 }

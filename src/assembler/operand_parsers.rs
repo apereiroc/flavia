@@ -4,7 +4,7 @@ use nom::types::CompleteStr;
 
 // Parser for integer numbers
 // We preface with `#` in our assembly language: #100
-named!(integer_operand<CompleteStr, Token>,
+named!(pub integer_operand<CompleteStr, Token>,
     ws!(
         do_parse!(
             // Look for `#` and pass the result

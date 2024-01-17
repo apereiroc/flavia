@@ -1,4 +1,4 @@
-use crate::assembler::opcode_parsers::opcode_load;
+use crate::assembler::opcode_parsers::opcode;
 use crate::assembler::operand_parsers::integer_operand;
 use crate::assembler::register_parsers::register;
 use crate::assembler::Token;
@@ -61,7 +61,7 @@ impl AssemblerInstruction {
 
 named!(pub instruction_one<CompleteStr, AssemblerInstruction>,
     do_parse!(
-        o: opcode_load >>
+        o: opcode >>
         r: register >>
         i: integer_operand >>
         (

@@ -4,7 +4,7 @@ use nom::types::CompleteStr;
 
 named!(pub opcode_load<CompleteStr, Token>,
     do_parse!(
-        tag!("load") >> (Token::Op{ code: Opcode::LOAD})
+        tag_no_case!("load") >> (Token::Op{ code: Opcode::LOAD})
     )
 );
 

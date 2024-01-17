@@ -22,6 +22,7 @@ pub enum Opcode {
     IGL,  // Short for illegal. Terminates with an error
 }
 
+// Create opcode from byte
 impl From<u8> for Opcode {
     fn from(value: u8) -> Self {
         match value {
@@ -43,6 +44,32 @@ impl From<u8> for Opcode {
             15 => return Opcode::JEQ,
             16 => return Opcode::JNEQ,
             _ => return Opcode::IGL,
+        }
+    }
+}
+
+// Create opcode from case insensitive string
+impl<'a> From<CompleteStr<'a>> for Opcode {
+    fn from(v: CompleteStr<'a>) -> Self {
+        match v {
+            CompleteStr("load") => Opcode::LOAD,
+            CompleteStr("add") => Opcode::ADD,
+            CompleteStr("sub") => Opcode::SUB,
+            CompleteStr("mul") => Opcode::MUL,
+            CompleteStr("div") => Opcode::DIV,
+            CompleteStr("hlt") => Opcode::HLT,
+            CompleteStr("jmp") => Opcode::JMP,
+            CompleteStr("jmpf") => Opcode::JMPF,
+            CompleteStr("jmpb") => Opcode::JMPB,
+            CompleteStr("eq") => Opcode::EQ,
+            CompleteStr("neq") => Opcode::NEQ,
+            CompleteStr("gte") => Opcode::GTE,
+            CompleteStr("gt") => Opcode::GT,
+            CompleteStr("lte") => Opcode::LTE,
+            CompleteStr("lt") => Opcode::LT,
+            CompleteStr("jeq") => Opcode::JEQ,
+            CompleteStr("jneq") => Opcode::JNEQ,
+            _ => Opcode::IGL,
         }
     }
 }

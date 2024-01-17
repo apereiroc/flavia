@@ -138,7 +138,7 @@ impl VirtualMachine {
                 self.equal_flag = val1 < val2;
                 self.next_8_bits();
             }
-            Opcode::GTQ => {
+            Opcode::GTE => {
                 // Get values from registers
                 let val1 = self.registers[self.next_8_bits() as usize];
                 let val2 = self.registers[self.next_8_bits() as usize];
@@ -146,7 +146,7 @@ impl VirtualMachine {
                 self.equal_flag = val1 >= val2;
                 self.next_8_bits();
             }
-            Opcode::LTQ => {
+            Opcode::LTE => {
                 // Get values from registers
                 let val1 = self.registers[self.next_8_bits() as usize];
                 let val2 = self.registers[self.next_8_bits() as usize];
@@ -366,21 +366,21 @@ fn test_opcode_lt() {
 }
 
 #[test]
-fn test_opcode_gtq() {
+fn test_opcode_gte() {
     let mut test_vm = VirtualMachine::new();
     test_vm.registers[3] = 5;
     test_vm.registers[7] = 10;
     test_vm.registers[9] = 10;
     let test_program = vec![
-        Opcode::GTQ as u8,
+        Opcode::GTE as u8,
         3,
         7,
         0,
-        Opcode::GTQ as u8,
+        Opcode::GTE as u8,
         7,
         3,
         0,
-        Opcode::GTQ as u8,
+        Opcode::GTE as u8,
         7,
         9,
         0,
@@ -395,21 +395,21 @@ fn test_opcode_gtq() {
 }
 
 #[test]
-fn test_opcode_ltq() {
+fn test_opcode_lte() {
     let mut test_vm = VirtualMachine::new();
     test_vm.registers[3] = 5;
     test_vm.registers[7] = 10;
     test_vm.registers[9] = 10;
     let test_program = vec![
-        Opcode::LTQ as u8,
+        Opcode::LTE as u8,
         3,
         7,
         0,
-        Opcode::LTQ as u8,
+        Opcode::LTE as u8,
         7,
         3,
         0,
-        Opcode::LTQ as u8,
+        Opcode::LTE as u8,
         7,
         9,
         0,

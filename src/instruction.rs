@@ -1,3 +1,5 @@
+use nom::types::CompleteStr;
+
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub enum Opcode {
     HLT,  // Short for halt. Stops the execution.
@@ -13,8 +15,8 @@ pub enum Opcode {
     NEQ,  // Short for not equal. Compare if two numbers are not equal
     GT,   // Short for greater than. Compare if a number is greater than other
     LT,   // Short for less than. Compare if a number is less than other
-    GTQ,  // Short for greater than or equal. Compare if a number is greater than or equal to other
-    LTQ,  // Short for greater than or equal. Compare if a number is less than or equal to other
+    GTE,  // Short for greater than or equal. Compare if a number is greater than or equal to other
+    LTE,  // Short for greater than or equal. Compare if a number is less than or equal to other
     JEQ,  // Short for jump if equal. Jump if the last comparison was evaluated to true
     JNEQ, // Short for jump if not equal. Jump if the last comparison was evaluated to false
     IGL,  // Short for illegal. Terminates with an error
@@ -36,8 +38,8 @@ impl From<u8> for Opcode {
             10 => return Opcode::NEQ,
             11 => return Opcode::GT,
             12 => return Opcode::LT,
-            13 => return Opcode::GTQ,
-            14 => return Opcode::LTQ,
+            13 => return Opcode::GTE,
+            14 => return Opcode::LTE,
             15 => return Opcode::JEQ,
             16 => return Opcode::JNEQ,
             _ => return Opcode::IGL,

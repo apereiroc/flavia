@@ -5,7 +5,7 @@ use nom::types::CompleteStr;
 // Parser for register index
 // We preface with `$` in our assembly language:
 // $3
-named!(register <CompleteStr, Token>,
+named!(pub register <CompleteStr, Token>,
     // Consume whitespaces
     ws!(
         do_parse!(

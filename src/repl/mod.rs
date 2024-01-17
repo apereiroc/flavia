@@ -22,7 +22,7 @@ impl Repl {
         println!("Welcome to flavia VM!");
         println!(
             "Type {:?}, {:?}, {:?} for more information",
-            ".program", ".registers", ".history"
+            ".prog", ".reg", ".history"
         );
         println!("Type {:?} to exit", ".q");
 
@@ -45,7 +45,7 @@ impl Repl {
 
             // `print!` does not automatically flush stdout like `println!` does
             // so we have to do that there for the user to see the prompt
-            print!("> ");
+            print!(">>> ");
             io::stdout().flush().expect("Unable to flush stdout");
 
             // Look at the string the user gave us
@@ -61,14 +61,13 @@ impl Repl {
 
             // Process the input
             match buffer {
-                ".program" => {
+                ".prog" => {
                     println!("List of instructions currently in VM's program vector:");
                     for instruction in &self.vm.program {
                         println!("{}", instruction);
                     }
-                    println!("End of list.");
                 }
-                ".registers" => {
+                ".reg" => {
                     println!("List of the registers' contents:");
                     println!("{:#?}", self.vm.registers);
                     println!("End of list.");

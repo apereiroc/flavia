@@ -18,6 +18,14 @@ pub struct Repl {
 impl Repl {
     // Creates and returns a new assembly REPL
     pub fn new() -> Repl {
+        // Print a welcome message with available commands
+        println!("Welcome to flavia VM!");
+        println!(
+            "Type {:?}, {:?}, {:?} for more information",
+            ".program", ".registers", ".history"
+        );
+        println!("Type {:?} to exit", ".q");
+
         Repl {
             command_buffer: vec![],
             vm: VirtualMachine::new(),

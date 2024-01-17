@@ -1,4 +1,6 @@
-use crate::instruction;
+use nom::types::CompleteStr;
+
+use crate::assembler::program_parsers::program;
 use crate::vm::VirtualMachine;
 use std;
 use std::io;
@@ -73,16 +75,15 @@ impl Repl {
                     }
                 }
                 _ => {
-                    let command = self.parse_hex(buffer);
-                    match command {
-                        Ok(bytes) => {
-                            for byte in bytes {
-                                self.vm.add_byte(byte);
-                            }
-                        }
-                        Err(_err) => {
-                            println!("Unable to decode hex string. Please enter 4 groups of 2 hex characters.")
-                        }
+                    let parsed_program = program(CompleteStr(buffer));
+                    if !parsed_program.is_ok() {
+                        println!("Unable to parse input");
+                        continue;
+                    }
+                    let (_, result) = parsed_program.unwrap();
+                    let bytecode = result.to_bytes();
+                    for byte in bytecode {
+                        self.vm.add_byte(byte);
                     }
                     self.vm.run_once();
                 }

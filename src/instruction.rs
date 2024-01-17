@@ -1,4 +1,4 @@
-#[derive(Debug, PartialEq)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub enum Opcode {
     HLT,  // Short for halt. Stops the execution.
     LOAD, // Load a number into a register

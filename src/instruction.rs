@@ -20,6 +20,8 @@ pub enum Opcode {
     JEQ,  // Short for jump if equal. Jump if the last comparison was evaluated to true
     JNEQ, // Short for jump if not equal. Jump if the last comparison was evaluated to false
     ALOC, // Short for allocate. Extends the size of the heap by the number of bytes in the corresponding register
+    INC,  // Short for increment. Increments the value in the register provided by 1
+    DEC,  // Short for decrement. Decrements the value in the register provided by 1
     IGL,  // Short for illegal. Terminates with an error
 }
 
@@ -45,6 +47,8 @@ impl From<u8> for Opcode {
             15 => return Opcode::JEQ,
             16 => return Opcode::JNEQ,
             17 => return Opcode::ALOC,
+            18 => return Opcode::INC,
+            19 => return Opcode::DEC,
             _ => return Opcode::IGL,
         }
     }
@@ -72,6 +76,8 @@ impl<'a> From<CompleteStr<'a>> for Opcode {
             CompleteStr("jeq") => Opcode::JEQ,
             CompleteStr("jneq") => Opcode::JNEQ,
             CompleteStr("aloc") => Opcode::ALOC,
+            CompleteStr("inc") => Opcode::INC,
+            CompleteStr("dec") => Opcode::DEC,
             _ => Opcode::IGL,
         }
     }

@@ -2,6 +2,7 @@ use crate::instruction::Opcode;
 
 pub struct VirtualMachine {
     pub registers: [i32; 32], // register set
+    heap: Vec<u8>,            // heap memory
     pc: usize,                // program counter
     pub program: Vec<u8>,     // vector to store the bytecode
     remainder: u32,           // to store the remainder of a division
@@ -12,6 +13,7 @@ impl VirtualMachine {
     pub fn new() -> VirtualMachine {
         VirtualMachine {
             registers: [0; 32],
+            heap: vec![],
             pc: 0,
             program: vec![],
             remainder: 0,
@@ -186,6 +188,8 @@ fn test_create_vm() {
     for register in vm.registers.into_iter() {
         assert_eq!(register, 0);
     }
+    // check if heap if empty
+    assert_eq!(vm.heap.is_empty(), true);
     // check if pc is 0
     assert_eq!(vm.pc, 0);
     // check if program is empty

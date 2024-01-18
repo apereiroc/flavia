@@ -36,6 +36,10 @@ impl AssemblerInstruction {
             }
         }
 
+        while results.len() < 4 {
+            results.push(0_u8);
+        }
+
         return results;
     }
 

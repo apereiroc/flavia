@@ -168,6 +168,12 @@ impl VirtualMachine {
                     self.pc = target as usize;
                 }
             }
+            Opcode::ALOC => {
+                let idx = self.next_8_bits() as usize;
+                let nbytes = self.registers[idx];
+                let new_len = self.heap.len() as i32 + nbytes;
+                self.heap.resize(new_len as usize, 0);
+            }
             Opcode::HLT => {
                 println!("Executing HLT");
                 return false;
@@ -451,4 +457,17 @@ fn test_opcode_jneq() {
     test_vm.run_once();
     test_vm.run_once();
     assert_eq!(test_vm.pc, 9);
+}
+
+#[test]
+fn test_opcode_aloc() {
+    let mut test_vm = VirtualMachine::new();
+    let test_program = vec![Opcode::ALOC as u8, 1, Opcode::ALOC as u8, 2];
+    test_vm.registers[1] = 100;
+    test_vm.registers[2] = 700;
+    test_vm.program = test_program;
+    test_vm.run_once();
+    assert_eq!(test_vm.heap.len(), 100);
+    test_vm.run_once();
+    assert_eq!(test_vm.heap.len(), 800);
 }

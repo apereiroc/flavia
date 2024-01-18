@@ -19,6 +19,7 @@ pub enum Opcode {
     LTE,  // Short for greater than or equal. Compare if a number is less than or equal to other
     JEQ,  // Short for jump if equal. Jump if the last comparison was evaluated to true
     JNEQ, // Short for jump if not equal. Jump if the last comparison was evaluated to false
+    ALOC, // Short for allocate. Extends the size of the heap by the number of bytes in the corresponding register
     IGL,  // Short for illegal. Terminates with an error
 }
 
@@ -43,6 +44,7 @@ impl From<u8> for Opcode {
             14 => return Opcode::LTE,
             15 => return Opcode::JEQ,
             16 => return Opcode::JNEQ,
+            17 => return Opcode::ALOC,
             _ => return Opcode::IGL,
         }
     }
@@ -69,6 +71,7 @@ impl<'a> From<CompleteStr<'a>> for Opcode {
             CompleteStr("lt") => Opcode::LT,
             CompleteStr("jeq") => Opcode::JEQ,
             CompleteStr("jneq") => Opcode::JNEQ,
+            CompleteStr("aloc") => Opcode::ALOC,
             _ => Opcode::IGL,
         }
     }

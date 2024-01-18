@@ -57,7 +57,7 @@ impl VirtualMachine {
     fn execute_instruction(&mut self) -> bool {
         // The program counter must be within the program
         if self.pc >= self.program.len() {
-            return false;
+            return true;
         }
 
         match self.decode_opcode() {
@@ -176,14 +176,14 @@ impl VirtualMachine {
             }
             Opcode::HLT => {
                 println!("Executing HLT");
-                return false;
+                return true;
             }
             Opcode::IGL => {
                 println!("Illegal code received");
-                return false;
+                return true;
             }
         }
-        return true;
+        return false;
     }
 }
 

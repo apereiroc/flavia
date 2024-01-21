@@ -1,4 +1,5 @@
-use crate::assembler::instruction_parsers::{instruction_one, AssemblerInstruction};
+use crate::assembler::directive_parsers::directive;
+use crate::assembler::instruction_parsers::{instruction, AssemblerInstruction};
 use nom::types::CompleteStr;
 
 #[derive(Debug, PartialEq)]
@@ -17,11 +18,11 @@ impl Program {
 }
 
 named!(pub program<CompleteStr, Program>,
-   do_parse!(
-       instructions: many1!(instruction_one) >>
+    do_parse!(
+        instructions: many1!(alt!(instruction | directive)) >>
         (
             Program {
-                instructions: instructions,
+                instructions
             }
         )
     )
@@ -44,5 +45,4 @@ fn test_program_to_bytes() {
     let (_, program) = result.unwrap();
     let bytecode = program.to_bytes();
     assert_eq!(bytecode.len(), 4);
-    println!("{:?}", bytecode);
 }

@@ -3,9 +3,12 @@ use nom::types::CompleteStr;
 use crate::assembler::program_parsers::program;
 use crate::vm::VirtualMachine;
 use std;
+use std::fs::File;
 use std::io;
+use std::io::Read;
 use std::io::Write;
 use std::num::ParseIntError;
+use std::path::Path;
 
 // Core structure for the REPL for the assembler
 pub struct Repl {
@@ -21,8 +24,8 @@ impl Repl {
         // Print a welcome message with available commands
         println!("Welcome to flavia VM!");
         println!(
-            "Type {:?}, {:?}, {:?} for more information",
-            ".prog", ".reg", ".history"
+            "Type {:?}, {:?}, {:?}, {:?}, {:?} for more information",
+            ".prog", ".reg", ".history", ".load_file", ".clear_program"
         );
         println!("Type {:?} to exit", ".q");
 
@@ -75,6 +78,32 @@ impl Repl {
                 ".q" => {
                     println!("Exiting. Bye bye!");
                     std::process::exit(0);
+                }
+                ".clear_program" => {
+                    self.vm.program.clear();
+                }
+                ".load_file" => {
+                    print!("Please enter the path to the file you wish to load: ");
+                    io::stdout().flush().expect("Unable to flush stdout");
+                    let mut tmp = String::new();
+                    stdin
+                        .read_line(&mut tmp)
+                        .expect("Unable to read line from user");
+                    let tmp = tmp.trim();
+                    let filename = Path::new(&tmp);
+                    let mut f = File::open(Path::new(&filename)).expect("File not found");
+                    let mut contents = String::new();
+                    f.read_to_string(&mut contents)
+                        .expect("There was an error reading from the file");
+                    let program = match program(CompleteStr(&contents)) {
+                        // Rusts pattern matching is pretty powerful an can even be nested
+                        Ok((_, program)) => program,
+                        Err(e) => {
+                            println!("Unable to parse input: {:?}", e);
+                            continue;
+                        }
+                    };
+                    self.vm.program.append(&mut program.to_bytes());
                 }
                 ".history" => {
                     for cmd in &self.command_buffer {

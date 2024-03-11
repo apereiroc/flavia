@@ -126,25 +126,4 @@ impl Repl {
             }
         }
     }
-
-    // Accepts a hexadecimal string without `0x`
-    // Returns a Vec of u8
-    // Example, to LOAD the number 1000 into register 1: 01 01 03 E8
-    fn parse_hex(&mut self, num_str: &str) -> Result<Vec<u8>, ParseIntError> {
-        let vec_of_str = num_str.split(" ").collect::<Vec<&str>>();
-        let mut result: Vec<u8> = vec![];
-
-        for hex_string in vec_of_str {
-            let byte = u8::from_str_radix(&hex_string, 16);
-            match byte {
-                Ok(this_result) => {
-                    result.push(this_result);
-                }
-                Err(e) => {
-                    return Err(e);
-                }
-            }
-        }
-        Ok(result)
-    }
 }

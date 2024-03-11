@@ -1,10 +1,9 @@
-use crate::assembler::directive_parsers::directive;
 use crate::assembler::label_parsers::label_declaration;
 use crate::assembler::opcode_parsers::opcode;
 use crate::assembler::operand_parsers::operand;
-use crate::assembler::register_parsers::register;
+
 use crate::assembler::Token;
-use crate::instruction::Opcode;
+
 use nom::types::CompleteStr;
 
 #[derive(Debug, PartialEq)]
@@ -105,6 +104,7 @@ named!(pub instruction<CompleteStr, AssemblerInstruction>,
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::instruction::Opcode;
 
     #[test]
     fn test_parse_instruction_form_one() {

@@ -7,7 +7,7 @@ use std::fs::File;
 use std::io;
 use std::io::Read;
 use std::io::Write;
-use std::num::ParseIntError;
+
 use std::path::Path;
 
 // Core structure for the REPL for the assembler

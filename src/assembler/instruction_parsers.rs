@@ -102,21 +102,26 @@ named!(pub instruction<CompleteStr, AssemblerInstruction>,
     )
 );
 
-#[test]
-fn test_parse_instruction_form_one() {
-    let result = instruction_combined(CompleteStr("load $0 #100\n"));
-    assert_eq!(
-        result,
-        Ok((
-            CompleteStr(""),
-            AssemblerInstruction {
-                opcode: Some(Token::Op { code: Opcode::LOAD }),
-                label: None,
-                directive: None,
-                operand1: Some(Token::Register { reg_num: 0 }),
-                operand2: Some(Token::IntegerOperand { value: 100 }),
-                operand3: None
-            }
-        ))
-    );
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_parse_instruction_form_one() {
+        let result = instruction_combined(CompleteStr("load $0 #100\n"));
+        assert_eq!(
+            result,
+            Ok((
+                CompleteStr(""),
+                AssemblerInstruction {
+                    opcode: Some(Token::Op { code: Opcode::LOAD }),
+                    label: None,
+                    directive: None,
+                    operand1: Some(Token::Register { reg_num: 0 }),
+                    operand2: Some(Token::IntegerOperand { value: 100 }),
+                    operand3: None
+                }
+            ))
+        );
+    }
 }

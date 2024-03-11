@@ -94,26 +94,31 @@ impl Instruction {
     }
 }
 
-#[test]
-fn test_create_hlt() {
-    let opcode = Opcode::HLT;
-    assert_eq!(opcode, Opcode::HLT);
-}
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-#[test]
-fn test_create_instruction() {
-    let instruction = Instruction::new(Opcode::HLT);
-    assert_eq!(instruction.opcode, Opcode::HLT);
-}
+    #[test]
+    fn test_create_hlt() {
+        let opcode = Opcode::HLT;
+        assert_eq!(opcode, Opcode::HLT);
+    }
 
-#[test]
-fn test_str_to_opcode() {
-    let opcode = Opcode::from(CompleteStr("load"));
-    assert_eq!(opcode, Opcode::LOAD);
-    let opcode = Opcode::from(CompleteStr("jmp"));
-    assert_eq!(opcode, Opcode::JMP);
-    let opcode = Opcode::from(CompleteStr("gte"));
-    assert_eq!(opcode, Opcode::GTE);
-    let opcode = Opcode::from(CompleteStr("caca"));
-    assert_eq!(opcode, Opcode::IGL);
+    #[test]
+    fn test_create_instruction() {
+        let instruction = Instruction::new(Opcode::HLT);
+        assert_eq!(instruction.opcode, Opcode::HLT);
+    }
+
+    #[test]
+    fn test_str_to_opcode() {
+        let opcode = Opcode::from(CompleteStr("load"));
+        assert_eq!(opcode, Opcode::LOAD);
+        let opcode = Opcode::from(CompleteStr("jmp"));
+        assert_eq!(opcode, Opcode::JMP);
+        let opcode = Opcode::from(CompleteStr("gte"));
+        assert_eq!(opcode, Opcode::GTE);
+        let opcode = Opcode::from(CompleteStr("caca"));
+        assert_eq!(opcode, Opcode::IGL);
+    }
 }

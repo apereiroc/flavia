@@ -54,6 +54,10 @@ impl VirtualMachine {
         self.program.push(byte);
     }
 
+    pub fn add_bytes(&mut self, mut b: Vec<u8>) {
+        self.program.append(&mut b);
+    }
+
     fn execute_instruction(&mut self) -> bool {
         // The program counter must be within the program
         if self.pc >= self.program.len() {

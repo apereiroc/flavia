@@ -18,6 +18,12 @@ pub struct Repl {
     vm: VirtualMachine,
 }
 
+impl Default for Repl {
+    fn default() -> Self {
+        Repl::new()
+    }
+}
+
 impl Repl {
     // Creates and returns a new assembly REPL
     pub fn new() -> Repl {
@@ -112,7 +118,7 @@ impl Repl {
                 }
                 _ => {
                     let parsed_program = program(CompleteStr(buffer));
-                    if !parsed_program.is_ok() {
+                    if parsed_program.is_err() {
                         println!("Unable to parse input");
                         continue;
                     }

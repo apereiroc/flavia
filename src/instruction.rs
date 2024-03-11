@@ -29,27 +29,27 @@ pub enum Opcode {
 impl From<u8> for Opcode {
     fn from(value: u8) -> Self {
         match value {
-            0 => return Opcode::HLT,
-            1 => return Opcode::LOAD,
-            2 => return Opcode::ADD,
-            3 => return Opcode::SUB,
-            4 => return Opcode::MUL,
-            5 => return Opcode::DIV,
-            6 => return Opcode::JMP,
-            7 => return Opcode::JMPF,
-            8 => return Opcode::JMPB,
-            9 => return Opcode::EQ,
-            10 => return Opcode::NEQ,
-            11 => return Opcode::GT,
-            12 => return Opcode::LT,
-            13 => return Opcode::GTE,
-            14 => return Opcode::LTE,
-            15 => return Opcode::JEQ,
-            16 => return Opcode::JNEQ,
-            17 => return Opcode::ALOC,
-            18 => return Opcode::INC,
-            19 => return Opcode::DEC,
-            _ => return Opcode::IGL,
+            0 => Opcode::HLT,
+            1 => Opcode::LOAD,
+            2 => Opcode::ADD,
+            3 => Opcode::SUB,
+            4 => Opcode::MUL,
+            5 => Opcode::DIV,
+            6 => Opcode::JMP,
+            7 => Opcode::JMPF,
+            8 => Opcode::JMPB,
+            9 => Opcode::EQ,
+            10 => Opcode::NEQ,
+            11 => Opcode::GT,
+            12 => Opcode::LT,
+            13 => Opcode::GTE,
+            14 => Opcode::LTE,
+            15 => Opcode::JEQ,
+            16 => Opcode::JNEQ,
+            17 => Opcode::ALOC,
+            18 => Opcode::INC,
+            19 => Opcode::DEC,
+            _ => Opcode::IGL,
         }
     }
 }
@@ -90,7 +90,7 @@ pub struct Instruction {
 
 impl Instruction {
     pub fn new(opcode: Opcode) -> Instruction {
-        Instruction { opcode: opcode }
+        Instruction { opcode }
     }
 }
 

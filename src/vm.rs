@@ -9,6 +9,12 @@ pub struct VirtualMachine {
     equal_flag: bool,         // to store the result of the last comparison operation
 }
 
+impl Default for VirtualMachine {
+    fn default() -> Self {
+        VirtualMachine::new()
+    }
+}
+
 impl VirtualMachine {
     pub fn new() -> VirtualMachine {
         VirtualMachine {
@@ -24,19 +30,19 @@ impl VirtualMachine {
     fn decode_opcode(&mut self) -> Opcode {
         let opcode = Opcode::from(self.program[self.pc]);
         self.pc += 1;
-        return opcode;
+        opcode
     }
 
     fn next_8_bits(&mut self) -> u8 {
         let result = self.program[self.pc];
         self.pc += 1;
-        return result;
+        result
     }
 
     fn next_16_bits(&mut self) -> u16 {
         let result = ((self.program[self.pc] as u16) << 8) | self.program[self.pc + 1] as u16;
         self.pc += 2;
-        return result;
+        result
     }
 
     pub fn run(&mut self) {
@@ -69,7 +75,7 @@ impl VirtualMachine {
                 // Cast to usize so to use it as index into the array
                 let register_idx = self.next_8_bits() as usize;
                 // Read the number
-                let number = self.next_16_bits() as u16;
+                let number = self.next_16_bits();
                 // Cast the number as our registers are i32
                 self.registers[register_idx] = number as i32;
             }
@@ -199,7 +205,7 @@ impl VirtualMachine {
                 return true;
             }
         }
-        return false;
+        false
     }
 }
 

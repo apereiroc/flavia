@@ -2,16 +2,18 @@ use crate::assembler::directive_parsers::directive;
 use crate::assembler::instruction_parsers::{instruction, AssemblerInstruction};
 use nom::types::CompleteStr;
 
+use super::symbols::SymbolTable;
+
 #[derive(Debug, PartialEq)]
 pub struct Program {
-    instructions: Vec<AssemblerInstruction>,
+    pub instructions: Vec<AssemblerInstruction>,
 }
 
 impl Program {
-    pub fn to_bytes(&self) -> Vec<u8> {
+    pub fn to_bytes(&self, symbols: &SymbolTable) -> Vec<u8> {
         let mut program = vec![];
         for instruction in &self.instructions {
-            program.append(&mut instruction.to_bytes());
+            program.append(&mut instruction.to_bytes(symbols));
         }
         program
     }
@@ -47,7 +49,8 @@ mod tests {
         let result = program(CompleteStr("load $0 #100\n"));
         assert_eq!(result.is_ok(), true);
         let (_, program) = result.unwrap();
-        let bytecode = program.to_bytes();
+        let symbols = SymbolTable::new();
+        let bytecode = program.to_bytes(&symbols);
         assert_eq!(bytecode.len(), 4);
     }
 }

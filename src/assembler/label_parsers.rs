@@ -16,7 +16,7 @@ named!(pub label_declaration<CompleteStr, Token>,
     )
 );
 
-// Looks for label usage, such as `@label1`
+// Looks for a user-defined label, such as `label1:`
 named!(pub label_usage<CompleteStr, Token>,
     ws!(
         do_parse!(

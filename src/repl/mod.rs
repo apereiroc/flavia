@@ -1,6 +1,5 @@
-use nom::types::CompleteStr;
-
 use crate::assembler::program_parsers::program;
+use crate::assembler::Assembler;
 use crate::vm::VirtualMachine;
 use std;
 use std::fs::File;
@@ -16,6 +15,8 @@ pub struct Repl {
     command_buffer: Vec<String>,
     // The virtual machine the REPL will use to execute the code
     vm: VirtualMachine,
+    // The assembler to transform code string into a vector of bytes
+    asm: Assembler,
 }
 
 impl Default for Repl {
@@ -38,6 +39,7 @@ impl Repl {
         Repl {
             command_buffer: vec![],
             vm: VirtualMachine::new(),
+            asm: Assembler::new(),
         }
     }
 
@@ -101,15 +103,18 @@ impl Repl {
                     let mut contents = String::new();
                     f.read_to_string(&mut contents)
                         .expect("There was an error reading from the file");
-                    let program = match program(CompleteStr(&contents)) {
-                        // Rusts pattern matching is pretty powerful an can even be nested
-                        Ok((_, program)) => program,
-                        Err(e) => {
-                            println!("Unable to parse input: {:?}", e);
+                    match self.asm.assemble(&contents) {
+                        Some(mut assembled_program) => {
+                            println!("Sending assembled program to VM");
+                            self.vm.program.append(&mut assembled_program);
+                            println!("{:#?}", self.vm.program);
+                            self.vm.run();
+                        }
+                        None => {
+                            println!("Unable to parse input");
                             continue;
                         }
-                    };
-                    self.vm.program.append(&mut program.to_bytes());
+                    }
                 }
                 ".history" => {
                     for cmd in &self.command_buffer {
@@ -117,16 +122,18 @@ impl Repl {
                     }
                 }
                 _ => {
-                    let parsed_program = program(CompleteStr(buffer));
-                    if parsed_program.is_err() {
-                        println!("Unable to parse input");
-                        continue;
-                    }
-                    let (_, result) = parsed_program.unwrap();
-                    let bytecode = result.to_bytes();
-                    for byte in bytecode {
-                        self.vm.add_byte(byte);
-                    }
+                    let program = match program(buffer.into()) {
+                        // Rusts pattern matching is pretty powerful an can even be nested
+                        Ok((_remainder, program)) => program,
+                        Err(e) => {
+                            println!("Unable to parse input: {:?}", e);
+                            continue;
+                        }
+                    };
+
+                    self.vm
+                        .program
+                        .append(&mut program.to_bytes(&self.asm.symbols));
                     self.vm.run_once();
                 }
             }
